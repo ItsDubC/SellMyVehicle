@@ -13,6 +13,7 @@ import { MakeService } from './services/make.service';
 import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
 import { HttpModule } from '@angular/http'
 import { FeatureService } from './services/feature.service';
+import { VehicleService } from './services/vehicle.service';
 
 @NgModule({
   declarations: [
@@ -36,8 +37,9 @@ import { FeatureService } from './services/feature.service';
     ])
   ],
   providers: [
-    MakeService,
-    FeatureService
+    // MakeService,
+    // FeatureService,
+    VehicleService
   ],
   bootstrap: [AppComponent]
 })
