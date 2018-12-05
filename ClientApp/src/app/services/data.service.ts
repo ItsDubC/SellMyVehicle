@@ -20,9 +20,9 @@ export class DataService {
 
   create(resource: any) {
     return throwError(new AppError());
-    return this.http.post(this.url, resource).pipe(
-        map(response => response.json()), 
-        catchError(this.handleError));
+    // return this.http.post(this.url, resource).pipe(
+    //     map(response => response.json()), 
+    //     catchError(this.handleError));
   }
 
   update(resource) {
