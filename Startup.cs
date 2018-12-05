@@ -28,6 +28,8 @@ namespace SellMyVehicle
             // register dependencies
             services.AddDbContext<SellMyVehicleDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
+            services.AddCors(options => options.AddPolicy("AllowAll", policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // In production, the Angular files will be served from this directory
@@ -51,9 +53,10 @@ namespace SellMyVehicle
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseCors("AllowAll");
 
             app.UseMvc(routes =>
             {

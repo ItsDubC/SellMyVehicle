@@ -10,7 +10,9 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { MakeService } from './services/make.service';
-import { ModelService } from './services/model.service';
+import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
+import { HttpModule } from '@angular/http'
+import { FeatureService } from './services/feature.service';
 
 @NgModule({
   declarations: [
@@ -18,21 +20,24 @@ import { ModelService } from './services/model.service';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    VehicleFormComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    HttpModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'vehicles/new', component: VehicleFormComponent },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
     ])
   ],
   providers: [
     MakeService,
-    ModelService
+    FeatureService
   ],
   bootstrap: [AppComponent]
 })
