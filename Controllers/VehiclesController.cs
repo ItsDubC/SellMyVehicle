@@ -34,9 +34,24 @@ namespace SellMyVehicle.Controllers
             var vehicle = await context.Vehicles.FirstOrDefaultAsync(x => x.Id == id);
 
             if (vehicle != null)
-                return Ok(Mapper.Map<Vehicle, VehicleResource>(vehicle));
+                return Ok(mapper.Map<Vehicle, VehicleResource>(vehicle));
             
             return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult CreateVehicle([FromBody] VehicleResource vehicleResource)
+        {
+            return Ok(mapper.Map<VehicleResource, Vehicle>(vehicleResource));
+            // if (ModelState.IsValid)
+            // {
+            //     Vehicle vehicle = Mapper.Map<VehicleResource, Vehicle>(vehicleResource);
+            //     context.Vehicles.Add(vehicle);
+
+            //     return Created("api/[controller]", vehicle);
+            // }
+            // else
+            //     return BadRequest();
         }
     }
 }
