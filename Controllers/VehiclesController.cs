@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -40,18 +41,32 @@ namespace SellMyVehicle.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateVehicle([FromBody] VehicleResource vehicleResource)
+        public async Task<IActionResult> CreateVehicle([FromBody] VehicleResource vehicleResource)
         {
-            return Ok(mapper.Map<VehicleResource, Vehicle>(vehicleResource));
-            // if (ModelState.IsValid)
-            // {
-            //     Vehicle vehicle = Mapper.Map<VehicleResource, Vehicle>(vehicleResource);
-            //     context.Vehicles.Add(vehicle);
+            //return Ok(mapper.Map<VehicleResource, Vehicle>(vehicleResource));
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            // var model = await context.Models.FindAsync(vehicleResource.ModelId);
 
-            //     return Created("api/[controller]", vehicle);
+            // if (model == null)
+            // {
+            //     ModelState.AddModelError("modelId", "Invalid modelId");
+            //     return BadRequest(ModelState);
             // }
-            // else
-            //     return BadRequest();
+            
+            Vehicle vehicle = mapper.Map<VehicleResource, Vehicle>(vehicleResource);
+            vehicle.LastUpdate = DateTime.Now;
+
+            context.Vehicles.Add(vehicle);
+            await context.SaveChangesAsync();
+
+            var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
+
+            return Ok(result);
+            //return Created("api/[controller]", vehicle);
+            
+            
         }
     }
 }
