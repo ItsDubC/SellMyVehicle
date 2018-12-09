@@ -28,26 +28,18 @@ namespace SellMyVehicle.Controllers.Mapping
                 .ForMember(v => v.Features, opt => opt.Ignore())
                 .AfterMap((vr, v) => {
                     // Remove unselected features
-                    var removedFeatures = new List<VehicleFeature>();
-
-                    foreach (var f in v.Features)
-                        if (!vr.Features.Contains(f.FeatureId))
-                            removedFeatures.Add(f);
-
+                    var removedFeatures = v.Features.Where(f => !vr.Features.Contains(f.FeatureId));
                     foreach (var f in removedFeatures)
                         v.Features.Remove(f);
                     
                     // Add new features
-                    foreach (var fId in vr.Features)
-                    {
-                        if (!v.Features.Any(f => f.FeatureId == fId))
-                            v.Features.Add(new VehicleFeature { FeatureId = fId });
+                    var addedFeatures = vr.Features
+                        .Where(fId => !v.Features
+                        .Any(f => f.FeatureId == fId))
+                        .Select(id => new VehicleFeature { FeatureId = id });
 
-                        // var existingFeature = v.Features.FirstOrDefault(x => x.FeatureId == fId);
-
-                        // if (existingFeature == null)
-                        //     v.Features.Add(new VehicleFeature { FeatureId = fId });
-                    }
+                    foreach (var f in addedFeatures)
+                        v.Features.Add(f);
                 });
         }
     }
