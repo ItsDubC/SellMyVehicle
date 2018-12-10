@@ -29,10 +29,10 @@ namespace SellMyVehicle.Controllers
             return mapper.Map<List<Vehicle>, List<VehicleResource>>(vehicles);
         }
 
-        [HttpGet("api/vehicles/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicle(int id)
         {
-            var vehicle = await context.Vehicles.FirstOrDefaultAsync(x => x.Id == id);
+            var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(x => x.Id == id);
 
             if (vehicle != null)
                 return Ok(mapper.Map<Vehicle, VehicleResource>(vehicle));
