@@ -23,10 +23,10 @@ namespace SellMyVehicle.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<VehicleResource>> GetVehicles()
+        public async Task<IEnumerable<SaveVehicleResource>> GetVehicles()
         {
             var vehicles = await context.Vehicles.Include(m => m.Model).ToListAsync();
-            return mapper.Map<List<Vehicle>, List<VehicleResource>>(vehicles);
+            return mapper.Map<List<Vehicle>, List<SaveVehicleResource>>(vehicles);
         }
 
         [HttpGet("{id}")]
@@ -35,13 +35,13 @@ namespace SellMyVehicle.Controllers
             var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(x => x.Id == id);
 
             if (vehicle != null)
-                return Ok(mapper.Map<Vehicle, VehicleResource>(vehicle));
+                return Ok(mapper.Map<Vehicle, SaveVehicleResource>(vehicle));
             
             return NotFound();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateVehicle([FromBody] VehicleResource vehicleResource)
+        public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
         {
             //return Ok(mapper.Map<VehicleResource, Vehicle>(vehicleResource));
             if (!ModelState.IsValid)
@@ -55,13 +55,13 @@ namespace SellMyVehicle.Controllers
             //     return BadRequest(ModelState);
             // }
             
-            Vehicle vehicle = mapper.Map<VehicleResource, Vehicle>(vehicleResource);
+            Vehicle vehicle = mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource);
             vehicle.LastUpdate = DateTime.Now;
 
             context.Vehicles.Add(vehicle);
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
+            var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
 
             return Ok(result);
             //return Created("api/[controller]", vehicle);
@@ -70,7 +70,7 @@ namespace SellMyVehicle.Controllers
         }
 
         [HttpPut("{id}")] // /api/vehicles/{id}
-        public async Task<IActionResult> UpdateVehicle(int id, [FromBody] VehicleResource vehicleResource)
+        public async Task<IActionResult> UpdateVehicle(int id, [FromBody] SaveVehicleResource vehicleResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -81,11 +81,11 @@ namespace SellMyVehicle.Controllers
                 return NotFound();
             else
             {
-                mapper.Map<VehicleResource, Vehicle>(vehicleResource, vehicle);
+                mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource, vehicle);
                 vehicle.LastUpdate = DateTime.Now;
                 await context.SaveChangesAsync();
 
-                var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
+                var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
 
                 return Ok(result);
             }
