@@ -32,10 +32,15 @@ namespace SellMyVehicle.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicle(int id)
         {
-            var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(x => x.Id == id);
+            var vehicle = await context.Vehicles
+                .Include(v => v.Features)
+                .ThenInclude(vf => vf.Feature)
+                .Include(v => v.Model)
+                .ThenInclude(m => m.Make)
+                .SingleOrDefaultAsync(x => x.Id == id);
 
             if (vehicle != null)
-                return Ok(mapper.Map<Vehicle, SaveVehicleResource>(vehicle));
+                return Ok(mapper.Map<Vehicle, VehicleResource>(vehicle));
             
             return NotFound();
         }
