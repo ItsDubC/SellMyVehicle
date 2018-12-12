@@ -15,10 +15,12 @@ namespace SellMyVehicle.Controllers
     {
         private readonly SellMyVehicleDbContext context;
         private readonly IMapper mapper;
+        private readonly IVehicleRepository repository;
 
-        public VehiclesController(SellMyVehicleDbContext context, IMapper mapper)
+        public VehiclesController(SellMyVehicleDbContext context, IMapper mapper, IVehicleRepository repository)
         {
             this.mapper = mapper;
+            this.repository = repository;
             this.context = context;
         }
 
@@ -32,12 +34,7 @@ namespace SellMyVehicle.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicle(int id)
         {
-            var vehicle = await context.Vehicles
-                .Include(v => v.Features)
-                .ThenInclude(vf => vf.Feature)
-                .Include(v => v.Model)
-                .ThenInclude(m => m.Make)
-                .SingleOrDefaultAsync(x => x.Id == id);
+            var vehicle = await repository.GetVehicle(id);
 
             if (vehicle != null)
                 return Ok(mapper.Map<Vehicle, VehicleResource>(vehicle));
@@ -52,26 +49,20 @@ namespace SellMyVehicle.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            // var model = await context.Models.FindAsync(vehicleResource.ModelId);
-
-            // if (model == null)
-            // {
-            //     ModelState.AddModelError("modelId", "Invalid modelId");
-            //     return BadRequest(ModelState);
-            // }
-            
             Vehicle vehicle = mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource);
             vehicle.LastUpdate = DateTime.Now;
 
             context.Vehicles.Add(vehicle);
             await context.SaveChangesAsync();
 
-            vehicle = await context.Vehicles
-                .Include(v => v.Features)
-                .ThenInclude(vf => vf.Feature)
-                .Include(v => v.Model)
-                .ThenInclude(m => m.Make)
-                .SingleOrDefaultAsync(x => x.Id == vehicle.Id);
+            // vehicle = await context.Vehicles
+            //     .Include(v => v.Features)
+            //     .ThenInclude(vf => vf.Feature)
+            //     .Include(v => v.Model)
+            //     .ThenInclude(m => m.Make)
+            //     .SingleOrDefaultAsync(x => x.Id == vehicle.Id);
+
+            vehicle = await repository.GetVehicle(vehicle.Id);
 
             var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
@@ -85,12 +76,7 @@ namespace SellMyVehicle.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            Vehicle vehicle = await context.Vehicles
-                .Include(v => v.Features)
-                .ThenInclude(vf => vf.Feature)
-                .Include(v => v.Model)
-                .ThenInclude(m => m.Make)
-                .SingleOrDefaultAsync(x => x.Id == id);
+            Vehicle vehicle = await repository.GetVehicle(id);
 
             if (vehicle == null)
                 return NotFound();
