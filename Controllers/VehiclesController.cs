@@ -66,12 +66,17 @@ namespace SellMyVehicle.Controllers
             context.Vehicles.Add(vehicle);
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
+            vehicle = await context.Vehicles
+                .Include(v => v.Features)
+                .ThenInclude(vf => vf.Feature)
+                .Include(v => v.Model)
+                .ThenInclude(m => m.Make)
+                .SingleOrDefaultAsync(x => x.Id == vehicle.Id);
+
+            var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
             return Ok(result);
             //return Created("api/[controller]", vehicle);
-            
-            
         }
 
         [HttpPut("{id}")] // /api/vehicles/{id}
@@ -80,7 +85,12 @@ namespace SellMyVehicle.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            Vehicle vehicle = await context.Vehicles.Include(v => v.Features).FirstOrDefaultAsync(v => v.Id == id);
+            Vehicle vehicle = await context.Vehicles
+                .Include(v => v.Features)
+                .ThenInclude(vf => vf.Feature)
+                .Include(v => v.Model)
+                .ThenInclude(m => m.Make)
+                .SingleOrDefaultAsync(x => x.Id == id);
 
             if (vehicle == null)
                 return NotFound();
@@ -90,7 +100,7 @@ namespace SellMyVehicle.Controllers
                 vehicle.LastUpdate = DateTime.Now;
                 await context.SaveChangesAsync();
 
-                var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
+                var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
                 return Ok(result);
             }

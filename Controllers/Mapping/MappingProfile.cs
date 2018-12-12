@@ -34,7 +34,7 @@ namespace SellMyVehicle.Controllers.Mapping
                 .AfterMap((vr, v) => {
                     // Remove unselected features
                     var removedFeatures = v.Features.Where(f => !vr.Features.Contains(f.FeatureId));
-                    foreach (var f in removedFeatures)
+                    foreach (var f in removedFeatures.ToList())
                         v.Features.Remove(f);
                     
                     // Add new features
@@ -43,7 +43,7 @@ namespace SellMyVehicle.Controllers.Mapping
                         .Any(f => f.FeatureId == fId))
                         .Select(id => new VehicleFeature { FeatureId = id });
 
-                    foreach (var f in addedFeatures)
+                    foreach (var f in addedFeatures.ToList())
                         v.Features.Add(f);
                 });
         }
