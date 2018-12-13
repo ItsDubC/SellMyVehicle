@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SellMyVehicle.Models;
+using SellMyVehicle.Core;
+using SellMyVehicle.Core.Models;
 
 namespace SellMyVehicle.Persistence
 {

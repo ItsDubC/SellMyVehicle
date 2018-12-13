@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using SellMyVehicle.Controllers.Resources;
-using SellMyVehicle.Models;
+using SellMyVehicle.Core.Models;
 
 namespace SellMyVehicle.Controllers.Mapping
 {

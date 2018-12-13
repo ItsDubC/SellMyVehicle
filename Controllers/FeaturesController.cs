@@ -4,7 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SellMyVehicle.Controllers.Resources;
-using SellMyVehicle.Models;
+using SellMyVehicle.Core.Models;
 using SellMyVehicle.Persistence;
 
 namespace SellMyVehicle.Controllers

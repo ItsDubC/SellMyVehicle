@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace SellMyVehicle.Persistence
+namespace SellMyVehicle.Core
 {
     public interface IUnitOfWork
     {

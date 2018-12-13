@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using SellMyVehicle.Models;
+using SellMyVehicle.Core.Models;
 
 namespace SellMyVehicle.Persistence
 {

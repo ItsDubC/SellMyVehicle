@@ -5,8 +5,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SellMyVehicle.Controllers.Resources;
-using SellMyVehicle.Models;
-using SellMyVehicle.Persistence;
+using SellMyVehicle.Core.Models;
+using SellMyVehicle.Core;
 
 namespace SellMyVehicle.Controllers
 {
@@ -45,7 +45,6 @@ namespace SellMyVehicle.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
         {
-            //return Ok(mapper.Map<VehicleResource, Vehicle>(vehicleResource));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
@@ -55,19 +54,11 @@ namespace SellMyVehicle.Controllers
             repository.Add(vehicle);
             await unitOfWork.CompleteAsync();
 
-            // vehicle = await context.Vehicles
-            //     .Include(v => v.Features)
-            //     .ThenInclude(vf => vf.Feature)
-            //     .Include(v => v.Model)
-            //     .ThenInclude(m => m.Make)
-            //     .SingleOrDefaultAsync(x => x.Id == vehicle.Id);
-
             vehicle = await repository.GetVehicle(vehicle.Id);
 
             var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
             return Ok(result);
-            //return Created("api/[controller]", vehicle);
         }
 
         [HttpPut("{id}")] // /api/vehicles/{id}
@@ -85,6 +76,8 @@ namespace SellMyVehicle.Controllers
                 mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource, vehicle);
                 vehicle.LastUpdate = DateTime.Now;
                 await unitOfWork.CompleteAsync();
+
+                vehicle = await repository.GetVehicle(vehicle.Id);
 
                 var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 

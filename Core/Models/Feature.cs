@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SellMyVehicle.Models
+namespace SellMyVehicle.Core.Models
 {
     public class Feature
     {
