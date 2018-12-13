@@ -24,7 +24,8 @@ namespace SellMyVehicle
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IVehicleRepository, VehicleRepository>();
-            
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddAutoMapper();
             
             // register dependencies

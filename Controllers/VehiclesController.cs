@@ -13,23 +13,23 @@ namespace SellMyVehicle.Controllers
     [Route("api/[controller]")]
     public class VehiclesController : Controller
     {
-        private readonly SellMyVehicleDbContext context;
         private readonly IMapper mapper;
         private readonly IVehicleRepository repository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public VehiclesController(SellMyVehicleDbContext context, IMapper mapper, IVehicleRepository repository)
+        public VehiclesController(IMapper mapper, IVehicleRepository repository, IUnitOfWork unitOfWork)
         {
             this.mapper = mapper;
             this.repository = repository;
-            this.context = context;
+            this.unitOfWork = unitOfWork;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<SaveVehicleResource>> GetVehicles()
-        {
-            var vehicles = await context.Vehicles.Include(m => m.Model).ToListAsync();
-            return mapper.Map<List<Vehicle>, List<SaveVehicleResource>>(vehicles);
-        }
+        // [HttpGet]
+        // public async Task<IEnumerable<SaveVehicleResource>> GetVehicles()
+        // {
+        //     var vehicles = await context.Vehicles.Include(m => m.Model).ToListAsync();
+        //     return mapper.Map<List<Vehicle>, List<SaveVehicleResource>>(vehicles);
+        // }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicle(int id)
@@ -52,8 +52,8 @@ namespace SellMyVehicle.Controllers
             Vehicle vehicle = mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource);
             vehicle.LastUpdate = DateTime.Now;
 
-            context.Vehicles.Add(vehicle);
-            await context.SaveChangesAsync();
+            repository.Add(vehicle);
+            await unitOfWork.CompleteAsync();
 
             // vehicle = await context.Vehicles
             //     .Include(v => v.Features)
@@ -84,7 +84,7 @@ namespace SellMyVehicle.Controllers
             {
                 mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource, vehicle);
                 vehicle.LastUpdate = DateTime.Now;
-                await context.SaveChangesAsync();
+                await unitOfWork.CompleteAsync();
 
                 var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
@@ -95,13 +95,13 @@ namespace SellMyVehicle.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVehicle(int id)
         {
-            var vehicle = await context.Vehicles.FindAsync(id);
+            var vehicle = await repository.GetVehicle(id, includeRelated: false);
 
             if (vehicle == null)
                 return NotFound();
             
-            context.Remove(vehicle);
-            await context.SaveChangesAsync();
+            repository.Remove(vehicle);
+            await unitOfWork.CompleteAsync();
 
             return Ok(id);
         }
