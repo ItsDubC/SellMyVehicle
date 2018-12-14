@@ -1,20 +1,22 @@
 <div class="col-md-12">
   <h1>New Vehicle</h1>
   <p>{{ vehicle | json }}</p>
-  <form (ngSubmit)="submit()">
+  <form (ngSubmit)="submit()" #f="ngForm" novalidate>
     <div class="form-group">
       <label for="makeId">Make</label>
-      <select name="makeId" id="makeId" class="form-control" (change)="onMakeChange()" [(ngModel)]="vehicle.makeId">
+      <select name="makeId" id="makeId" class="form-control" (change)="onMakeChange()" [(ngModel)]="vehicle.makeId" required #make="ngModel">
         <option value=""></option>
         <option *ngFor="let make of makes" [value]="make.id">{{ make.name }}</option>
       </select>
+      <div class="alert alert-danger" *ngIf="make.touched && !make.valid">Please specify the make.</div>
     </div>
     <div class="form-group">
       <label for="modelId">Model</label>
-      <select name="modelId" id="modelId" class="form-control" [(ngModel)]="vehicle.modelId">
+      <select name="modelId" id="modelId" class="form-control" [(ngModel)]="vehicle.modelId" required #model="ngModel">
           <option value=""></option>
         <option *ngFor="let model of models" [value]="model.id">{{ model.name }}</option>
       </select>
+      <div class="alert alert-danger" *ngIf="model.touched && !model.valid">Please specify the model.</div>
     </div>
     <div class="form-group">
       <p>Is this vehicle registered?</p>
@@ -37,16 +39,18 @@
     <h2>Contact</h2>
     <div class="form-group">
       <label for="contactName">Name</label>
-      <input id="contactName" type="text" class="form-control" [(ngModel)]="vehicle.contact.name" name="contactName">
+      <input id="contactName" type="text" class="form-control" [(ngModel)]="vehicle.contact.name" name="contactName" required #contactName="ngModel">
+      <div class="alert alert-danger" *ngIf="contactName.touched && !contactName.valid">Please specify a name.</div>
     </div>
     <div class="form-group">
       <label for="contactPhone">Phone</label>
-      <input id="contactPhone" type="text" class="form-control" [(ngModel)]="vehicle.contact.phone" name="contactPhone">
+      <input id="contactPhone" type="text" class="form-control" [(ngModel)]="vehicle.contact.phone" name="contactPhone" required #contactPhone="ngModel">
+      <div class="alert alert-danger" *ngIf="contactPhone.touched && !contactPhone.valid">Please specify a name.</div>
     </div>
     <div class="form-group">
       <label for="contactEmail" for="">Email</label>
       <input id="contactEmail" type="text" class="form-control" [(ngModel)]="vehicle.contact.email" name="contactEmail">
     </div>
-    <button class="btn btn-primary">Save</button>
+    <button class="btn btn-primary" >Save</button>
   </form>
 </div>
