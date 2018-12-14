@@ -23,6 +23,12 @@ export class VehicleService {
       map(response => response.json()), catchError(this.handleError));
   }
 
+  create(vehicle) {
+    return this.http.post("/api/vehicles", vehicle).pipe(
+      map(response => response.json()), catchError(this.handleError));
+    )
+  }
+
   private handleError(error: Response) {
     console.log(error);
 
