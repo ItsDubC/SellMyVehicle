@@ -5,6 +5,7 @@ import { throwError } from 'rxjs';
 import { NotFoundError } from '../common/not-found-error';
 import { BadRequestError } from '../common/bad-request-error';
 import { AppError } from '../common/app-error';
+import { SaveVehicle } from '../models/SaveVehicle';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,16 @@ export class VehicleService {
   create(vehicle) {
     return this.http.post("/api/vehicles", vehicle).pipe(
       map(response => response.json()), catchError(this.handleError));
+  }
+
+  update(vehicle: SaveVehicle) {
+    return this.http.put("/api/vehicles/" + vehicle.id, vehicle).pipe(
+      map(r => r.json()), catchError(this.handleError));
+  }
+
+  delete(id) {
+    return this.http.delete("/api/vehicles/" + id).pipe(
+      map(r => r.json()), catchError(this.handleError));
   }
 
   private handleError(error: Response) {
