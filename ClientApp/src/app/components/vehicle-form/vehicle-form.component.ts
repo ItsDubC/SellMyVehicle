@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 // import { MakeService } from 'src/app/services/make.service';
 // import { FeatureService } from 'src/app/services/feature.service';
 import { VehicleService } from 'src/app/services/vehicle.service';
@@ -20,10 +21,39 @@ export class VehicleFormComponent implements OnInit {
 
   //constructor(private makeService: MakeService, private featureService: FeatureService) { }
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private vehicleService: VehicleService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService) { 
+      route.params.subscribe(p => {
+        if(p['id'])
+          this.vehicle.id = +p["id"];
+      });
+    }
 
   ngOnInit() {
+    if(this.vehicle.id > 0){
+      this.vehicleService.getVehicle(this.vehicle.id).subscribe(vehicle => { 
+        this.vehicle = vehicle; 
+      }, err => {
+        // if (err.status == 404)
+        //   this.router.navigate(["/home"]);
+  
+        if (err.constructor.name == "NotFoundError")
+          this.router.navigate(["/home"]);
+      });
+    }
+
+    // this.vehicleService.getVehicle(this.vehicle.id).subscribe(vehicle => {
+    //   this.vehicle = vehicle;
+    // }, err => {
+    //   // if (err.status == 404)
+    //   //   this.router.navigate(["/home"]);
+
+    //   if (err.constructor.name == "NotFoundError")
+    //     this.router.navigate(["/home"]);
+    // });
+
     this.vehicleService.getMakes().subscribe(makes => {
       this.makes = makes;
     });

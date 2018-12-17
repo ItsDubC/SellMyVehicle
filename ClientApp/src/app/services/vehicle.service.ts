@@ -18,6 +18,11 @@ export class VehicleService {
       map(response => response.json()), catchError(this.handleError));
   }
 
+  getVehicle(id) {
+    return this.http.get("/api/vehicles/" + id).pipe(
+      map(response => response.json()), catchError(this.handleError));
+  }
+
   getFeatures() {
     return this.http.get("/api/features").pipe(
       map(response => response.json()), catchError(this.handleError));

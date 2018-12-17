@@ -34,10 +34,13 @@ import { AppErrorHandler } from './common/app-error-handler';
     FormsModule,
     HttpModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', redirectTo: "home", pathMatch: 'full' },
       { path: 'vehicles/new', component: VehicleFormComponent },
+      { path: 'vehicles/:id', component: VehicleFormComponent },
+      { path: 'home', component: HomeComponent },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: '**', redirectTo: "home" },
     ]),
     ToastrModule.forRoot()
   ],
