@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 // import { FeatureService } from 'src/app/services/feature.service';
 import { VehicleService } from 'src/app/services/vehicle.service';
 import { ToastrService } from 'ngx-toastr';
+import { Observable, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -32,35 +33,63 @@ export class VehicleFormComponent implements OnInit {
     }
 
   ngOnInit() {
-    if(this.vehicle.id > 0){
-      this.vehicleService.getVehicle(this.vehicle.id).subscribe(vehicle => { 
-        this.vehicle = vehicle; 
-      }, err => {
-        // if (err.status == 404)
-        //   this.router.navigate(["/home"]);
-  
-        if (err.constructor.name == "NotFoundError")
-          this.router.navigate(["/home"]);
-      });
+    let observables = [
+      this.vehicleService.getMakes(),
+      this.vehicleService.getFeatures()
+    ];
+
+    if (this.vehicle.id > 0) {
+      observables.push(this.vehicleService.getVehicle(this.vehicle.id));
     }
 
-    // this.vehicleService.getVehicle(this.vehicle.id).subscribe(vehicle => {
-    //   this.vehicle = vehicle;
+    forkJoin(observables).subscribe(data => {
+      this.makes = data[0];
+      this.features = data[1];
+
+      if (data[2])
+        this.vehicle = data[2];
+    }, err => {
+      // if (err.status == 404)
+        //   this.router.navigate(["/home"]);
+
+      if (err.constructor.name == "NotFoundError")
+          this.router.navigate(["/home"]);
+    });
+
+    // forkJoin([
+    //   this.vehicleService.getVehicle(this.vehicle.id),
+    //   this.vehicleService.getMakes(),
+    //   this.vehicleService.getFeatures()
+    // ]).subscribe(data => {
+    //   this.makes = data[0];
+    //   this.features = data[1];
     // }, err => {
     //   // if (err.status == 404)
-    //   //   this.router.navigate(["/home"]);
+    //     //   this.router.navigate(["/home"]);
 
     //   if (err.constructor.name == "NotFoundError")
-    //     this.router.navigate(["/home"]);
+    //       this.router.navigate(["/home"]);
     // });
 
-    this.vehicleService.getMakes().subscribe(makes => {
-      this.makes = makes;
-    });
+    // if(this.vehicle.id > 0){
+    //   this.vehicleService.getVehicle(this.vehicle.id).subscribe(vehicle => { 
+    //     this.vehicle = vehicle; 
+    //   }, err => {
+    //     // if (err.status == 404)
+    //     //   this.router.navigate(["/home"]);
+  
+    //     if (err.constructor.name == "NotFoundError")
+    //       this.router.navigate(["/home"]);
+    //   });
+    // }
 
-    this.vehicleService.getFeatures().subscribe(features => {
-      this.features = features;
-    });
+    // this.vehicleService.getMakes().subscribe(makes => {
+    //   this.makes = makes;
+    // });
+
+    // this.vehicleService.getFeatures().subscribe(features => {
+    //   this.features = features;
+    // });
   }
 
   onMakeChange() {
