@@ -24,6 +24,11 @@ export class VehicleService {
       map(response => response.json()), catchError(this.handleError));
   }
 
+  getVehicles() {
+    return this.http.get("/api/vehicles").pipe(
+      map(r => r.json()), catchError(this.handleError));
+  }
+
   getFeatures() {
     return this.http.get("/api/features").pipe(
       map(response => response.json()), catchError(this.handleError));
