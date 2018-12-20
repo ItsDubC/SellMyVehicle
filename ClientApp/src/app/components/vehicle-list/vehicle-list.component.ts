@@ -12,6 +12,7 @@ import { KeyValuePair } from 'src/app/models/KeyValuePair';
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
   makes: KeyValuePair[];
+  filter: any = {};
 
   constructor(private vehicleService: VehicleService) { }
 
@@ -25,7 +26,11 @@ export class VehicleListComponent implements OnInit {
     })
   }
 
-  onchange($event) {
+  onFilterChange() {
+    debugger;
 
+    if (this.filter.makeId) {
+      // filter make
+    }
   }
 }
