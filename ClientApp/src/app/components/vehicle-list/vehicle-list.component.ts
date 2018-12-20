@@ -13,6 +13,7 @@ export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
   makes: KeyValuePair[];
   filter: any = {};
+  allVehicles: Vehicle[];
 
   constructor(private vehicleService: VehicleService) { }
 
@@ -23,14 +24,24 @@ export class VehicleListComponent implements OnInit {
 
     this.vehicleService.getVehicles().subscribe(v => {
       this.vehicles = v;
+      this.allVehicles = v;
     })
   }
 
   onFilterChange() {
-    debugger;
+    var vehicles = this.allVehicles;
 
-    if (this.filter.makeId) {
-      // filter make
-    }
+    if (this.filter.makeId)
+      vehicles = vehicles.filter(v => v.make.id == this.filter.makeId);
+    
+      // if (this.filter.modelId)
+      //   vehicles = vehicles.filter(v => v.model.id == this.filter.modelId);
+
+      this.vehicles = vehicles;
+  }
+
+  resetFilters() {
+    this.filter = {};
+    this.onFilterChange();
   }
 }

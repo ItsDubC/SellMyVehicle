@@ -2,12 +2,17 @@
 <p>
   <a [routerLink]="['/vehicles/new']" class="btn btn-primary">New</a>
 </p>
-<div class="form-group card card-block bg-faded">
-  <label for="make"></label>
-  <select name="" id="make" class="form-control" (change)="onFilterChange()" [(ngModel)]="filter.makeId">
-    <option value=""></option>
-    <option *ngFor="let m of makes" value="{{ m.id }}">{{ m.name }}</option>
-  </select>
+<div class="card bg-light col-md-12">
+  <div class="card-body">
+    <div class="form-group">
+      <label for="make">Make</label>
+      <select name="" id="make" class="form-control" (change)="onFilterChange()" [(ngModel)]="filter.makeId">
+        <option value=""></option>
+        <option *ngFor="let m of makes" value="{{ m.id }}">{{ m.name }}</option>
+      </select>
+    </div>
+    <button class="btn btn-default col-md-2" (click)="resetFilters()">Reset</button>
+  </div>
 </div>
 <table class="table">
 <thead>
@@ -16,12 +21,14 @@
     <th scope="col">Make</th>
     <th scope="col">Model</th>
     <th scope="col">Contact Name</th>
+    <th></th>
   </tr>
   <tr *ngFor="let v of vehicles">
     <td>{{ v.id }}</td>
     <td>{{ v.make.name }}</td>
     <td>{{ v.model.name }}</td>
     <td>{{ v.contact.name }}</td>
+    <td><a [routerLink]="['/vehicles/' + v.id]">View</a></td>
   </tr>
 </thead>
 </table>
