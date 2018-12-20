@@ -1,5 +1,14 @@
 <h2>Vehicles</h2>
-
+<p>
+  <a [routerLink]="['/vehicles/new']" class="btn btn-primary">New</a>
+</p>
+<div class="form-group">
+  <label for="make"></label>
+  <select name="" id="make" class="form-control">
+    <option value=""></option>
+    <option *ngFor="let m of makes" value="{{ m.id }}">{{ m.name }}</option>
+  </select>
+</div>
 <table class="table">
 <thead>
   <tr>
