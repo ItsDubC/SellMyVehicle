@@ -45,7 +45,7 @@
     <div class="form-group">
       <label for="contactPhone">Phone</label>
       <input id="contactPhone" type="text" class="form-control" [(ngModel)]="vehicle.contact.phone" name="contactPhone" required #contactPhone="ngModel">
-      <div class="alert alert-danger" *ngIf="contactPhone.touched && !contactPhone.valid">Please specify a name.</div>
+      <div class="alert alert-danger" *ngIf="contactPhone.touched && !contactPhone.valid">Please specify a phone.</div>
     </div>
     <div class="form-group">
       <label for="contactEmail" for="">Email</label>

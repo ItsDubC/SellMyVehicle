@@ -4,7 +4,7 @@
 </p>
 <div class="form-group">
   <label for="make"></label>
-  <select name="" id="make" class="form-control">
+  <select name="" id="make" class="form-control" (change)="onChange($event)">
     <option value=""></option>
     <option *ngFor="let m of makes" value="{{ m.id }}">{{ m.name }}</option>
   </select>
