@@ -34,6 +34,9 @@ namespace SellMyVehicle.Persistence
             if (filter.MakeId.HasValue)
                 query = query.Where(x => x.Model.MakeId == filter.MakeId.Value);
 
+            if (filter.ModelId.HasValue)
+                query = query.Where(x => x.Model.Id == filter.ModelId.Value);
+
             return await query.ToListAsync();
         }
 

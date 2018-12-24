@@ -11,6 +11,7 @@ import { SaveVehicle } from '../models/SaveVehicle';
   providedIn: 'root'
 })
 export class VehicleService {
+  private readonly vehiclesEndpoint = "/api/vehicles";
 
   constructor(private http: Http) { }
 
@@ -20,12 +21,12 @@ export class VehicleService {
   }
 
   getVehicle(id) {
-    return this.http.get("/api/vehicles/" + id).pipe(
+    return this.http.get(this.vehiclesEndpoint + "/" + id).pipe(
       map(response => response.json()), catchError(this.handleError));
   }
 
-  getVehicles() {
-    return this.http.get("/api/vehicles").pipe(
+  getVehicles(filter) {
+    return this.http.get(this.vehiclesEndpoint + this.toQueryString(filter)).pipe(
       map(r => r.json()), catchError(this.handleError));
   }
 
@@ -35,18 +36,41 @@ export class VehicleService {
   }
 
   create(vehicle) {
-    return this.http.post("/api/vehicles", vehicle).pipe(
+    return this.http.post(this.vehiclesEndpoint, vehicle).pipe(
       map(response => response.json()), catchError(this.handleError));
   }
 
   update(vehicle: SaveVehicle) {
-    return this.http.put("/api/vehicles/" + vehicle.id, vehicle).pipe(
+    return this.http.put(this.vehiclesEndpoint + "/" + vehicle.id, vehicle).pipe(
       map(r => r.json()), catchError(this.handleError));
   }
 
   delete(id) {
-    return this.http.delete("/api/vehicles/" + id).pipe(
+    return this.http.delete(this.vehiclesEndpoint + "/" + id).pipe(
       map(r => r.json()), catchError(this.handleError));
+  }
+
+  // refactor in its own class later one
+  toQueryString(obj) {
+    var parts = [];
+    var partsString = "";
+
+    for (var property in obj) {
+      var value = obj[property];
+
+      if (value != undefined && value != null)
+        parts.push(encodeURIComponent(property) + "=" + encodeURIComponent(value));
+    }
+
+    if (parts.length > 0) {
+      for (var i = 0; i < parts.length; i++) {
+        if (i == 0)
+          partsString = "?" + parts[i];
+        else
+          partsString += "&" + parts[i];
+      }
+    }
+    return partsString;
   }
 
   private handleError(error: Response) {
