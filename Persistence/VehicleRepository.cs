@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SellMyVehicle.Core;
@@ -23,13 +24,17 @@ namespace SellMyVehicle.Persistence
                     .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<Vehicle>> GetVehicles() 
+        public async Task<IEnumerable<Vehicle>> GetVehicles(Filter filter) 
         {
-            var vehicles = await context.Vehicles
+            var query = context.Vehicles
                 .Include(v => v.Model).ThenInclude(m => m.Make)
                 .Include(v => v.Features).ThenInclude(f => f.Feature)
-                .ToListAsync();
-            return vehicles;
+                .AsQueryable();
+
+            if (filter.MakeId.HasValue)
+                query = query.Where(x => x.Model.MakeId == filter.MakeId.Value);
+
+            return await query.ToListAsync();
         }
 
         public void Add(Vehicle vehicle)
