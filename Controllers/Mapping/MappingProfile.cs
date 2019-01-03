@@ -22,7 +22,7 @@ namespace SellMyVehicle.Controllers.Mapping
                 .ForMember(vr => vr.Contact, opt => opt.MapFrom(v => new ContactResource { Name = v.ContactName, Email = v.ContactEmail, Phone = v.ContactPhone }))
                 .ForMember(vr => vr.Features, opt => opt.MapFrom(v => v.Features.Select(f => new KeyValuePairResource { Id = f.FeatureId, Name = f.Feature.Name })))
                 .ForMember(vr => vr.Make, opt => opt.MapFrom(v => v.Model.Make));
-            CreateMap<Filter, FilterResource>();
+            CreateMap<VehicleQuery, VehicleQueryResource>();
 
             // API resource to domain
             CreateMap<SaveVehicleResource, Vehicle>()
@@ -47,7 +47,7 @@ namespace SellMyVehicle.Controllers.Mapping
                     foreach (var f in addedFeatures.ToList())
                         v.Features.Add(f);
                 });
-            CreateMap<FilterResource, Filter>();
+            CreateMap<VehicleQueryResource, VehicleQuery>();
         }
     }
 }
