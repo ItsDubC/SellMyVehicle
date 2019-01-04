@@ -12,7 +12,7 @@ import { KeyValuePair } from 'src/app/models/KeyValuePair';
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
   makes: KeyValuePair[];
-  filter: any = {};
+  query: any = {};
 
   constructor(private vehicleService: VehicleService) { }
 
@@ -25,7 +25,7 @@ export class VehicleListComponent implements OnInit {
   }
 
   populateVehicles() {
-    this.vehicleService.getVehicles(this.filter).subscribe(v => this.vehicles = v);
+    this.vehicleService.getVehicles(this.query).subscribe(v => this.vehicles = v);
   }
 
   onFilterChange() {
@@ -34,7 +34,20 @@ export class VehicleListComponent implements OnInit {
   }
 
   resetFilters() {
-    this.filter = {};
+    this.query = {};
     this.onFilterChange();
+  }
+
+  sortBy(field) {
+    console.log("clicked");
+    if (this.query.sortBy == field) {
+      this.query.isSortAscending = !this.query.isSortAscending;
+    }
+    else {
+      this.query.sortBy = field;
+      this.query.isSortAscending = true;
+    }
+
+    this.populateVehicles();
   }
 }

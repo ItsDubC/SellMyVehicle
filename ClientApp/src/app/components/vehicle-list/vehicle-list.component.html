@@ -6,7 +6,7 @@
   <div class="card-body">
     <div class="form-group">
       <label for="make">Make</label>
-      <select name="" id="make" class="form-control" (change)="onFilterChange()" [(ngModel)]="filter.makeId">
+      <select name="" id="make" class="form-control" (change)="onFilterChange()" [(ngModel)]="query.makeId">
         <option value=""></option>
         <option *ngFor="let m of makes" value="{{ m.id }}">{{ m.name }}</option>
       </select>
@@ -18,9 +18,15 @@
 <thead>
   <tr>
     <th scope="col">Id</th>
-    <th scope="col">Make</th>
-    <th scope="col">Model</th>
-    <th scope="col">Contact Name</th>
+    <th scope="col" (click)="sortBy('make')">
+      Make
+      <i *ngIf="query.sortBy == 'make'" 
+        class="fa" 
+        [class.fa-sort-asc]="query.isSortAscending" 
+        [class.fa-sort-desc]="!query.isSortAscending"></i>
+    </th>
+    <th scope="col" (click)="sortBy('model')">Model</th>
+    <th scope="col" (click)="sortBy('contactName')">Contact Name</th>
     <th></th>
   </tr>
   <tr *ngFor="let v of vehicles">
