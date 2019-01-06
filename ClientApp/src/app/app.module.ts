@@ -18,6 +18,7 @@ import { VehicleService } from './services/vehicle.service';
 import { ToastrModule } from 'ngx-toastr'
 import { AppErrorHandler } from './common/app-error-handler';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
+import { PaginationComponent } from './components/shared/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { VehicleListComponent } from './components/vehicle-list/vehicle-list.com
     CounterComponent,
     FetchDataComponent,
     VehicleFormComponent,
-    VehicleListComponent
+    VehicleListComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -48,8 +50,6 @@ import { VehicleListComponent } from './components/vehicle-list/vehicle-list.com
     ToastrModule.forRoot()
   ],
   providers: [
-    // MakeService,
-    // FeatureService,
     VehicleService,
     {
       provide: ErrorHandler, 

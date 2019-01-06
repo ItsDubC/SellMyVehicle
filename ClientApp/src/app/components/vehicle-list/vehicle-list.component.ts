@@ -12,7 +12,9 @@ import { KeyValuePair } from 'src/app/models/KeyValuePair';
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
   makes: KeyValuePair[];
-  query: any = {};
+  query: any = {
+    pageSize: 2
+  };
   columns = [
     { title: "Id" },
     { title: "Make", key: "make", isSortable: true },
@@ -54,6 +56,11 @@ export class VehicleListComponent implements OnInit {
       this.query.isSortAscending = true;
     }
 
+    this.populateVehicles();
+  }
+
+  onPageChange(pageNumber) {
+    this.query.page = pageNumber;
     this.populateVehicles();
   }
 }
