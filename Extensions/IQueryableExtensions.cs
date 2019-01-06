@@ -17,18 +17,17 @@ namespace SellMyVehicle.Extensions
                 return query.OrderBy(columnsMap[queryObj.SortBy]);
             else
                 return query.OrderByDescending(columnsMap[queryObj.SortBy]);
+        }
 
-            // if (queryObj.SortBy == "make")
-            //     query = (queryObj.IsSortAscending) ? query.OrderBy(v => v.Model.Make.Name) : query.OrderByDescending(v => v.Model.Make.Name);
-            
-            // if (queryObj.SortBy == "model")
-            //     query = (queryObj.IsSortAscending) ? query.OrderBy(v => v.Model.Name) : query.OrderByDescending(v => v.Model.Name);
+        public static IQueryable<T> ApplyPaging<T>(this IQueryable<T> query, IQueryObject queryObj)
+        {
+            if (queryObj.Page <= 0)
+                queryObj.Page = 1;
+                
+            if (queryObj.PageSize <= 0)
+                queryObj.PageSize = 10;
 
-            // if (queryObj.SortBy == "contactName")
-            //     query = (queryObj.IsSortAscending) ? query.OrderBy(v => v.ContactName) : query.OrderByDescending(v => v.ContactName);
-            
-            // if (queryObj.SortBy == "id")
-            //     query = (queryObj.IsSortAscending) ? query.OrderBy(v => v.Id) : query.OrderByDescending(v => v.Id);
+            return query.Skip((queryObj.Page - 1) * queryObj.PageSize).Take(queryObj.PageSize);
         }
     }
 }
