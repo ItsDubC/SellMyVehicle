@@ -10,10 +10,10 @@ import { KeyValuePair } from 'src/app/models/KeyValuePair';
   styleUrls: ['./vehicle-list.component.css']
 })
 export class VehicleListComponent implements OnInit {
-  //vehicles: Vehicle[];
+  private readonly PAGE_SIZE = 2;
   makes: KeyValuePair[];
   query: any = {
-    pageSize: 2
+    pageSize: this.PAGE_SIZE
   };
   columns = [
     { title: "Id" },
@@ -41,12 +41,17 @@ export class VehicleListComponent implements OnInit {
 
   onFilterChange() {
     //this.filter.modelId = 8;
+    this.query.page = 1;
     this.populateVehicles();
   }
 
   resetFilters() {
-    this.query = {};
-    this.onFilterChange();
+    this.query = {
+      page: 1,
+      pageSize: this.PAGE_SIZE
+    };
+
+    this.populateVehicles();
   }
 
   sortBy(field) {
