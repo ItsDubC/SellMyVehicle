@@ -10,7 +10,7 @@ import { KeyValuePair } from 'src/app/models/KeyValuePair';
   styleUrls: ['./vehicle-list.component.css']
 })
 export class VehicleListComponent implements OnInit {
-  vehicles: Vehicle[];
+  //vehicles: Vehicle[];
   makes: KeyValuePair[];
   query: any = {
     pageSize: 2
@@ -21,6 +21,7 @@ export class VehicleListComponent implements OnInit {
     { title: "Model", key: "model", isSortable: true },
     { title: "Contact Name", key: "contactName", isSortable: true },
   ];
+  queryResult: any = {};
 
   constructor(private vehicleService: VehicleService) { }
 
@@ -33,7 +34,9 @@ export class VehicleListComponent implements OnInit {
   }
 
   populateVehicles() {
-    this.vehicleService.getVehicles(this.query).subscribe(v => this.vehicles = v);
+    //this.vehicleService.getVehicles(this.query).subscribe(v => this.vehicles = v);
+    this.vehicleService.getVehicles(this.query)
+      .subscribe(result => this.queryResult = result);
   }
 
   onFilterChange() {

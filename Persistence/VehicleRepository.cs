@@ -27,11 +27,40 @@ namespace SellMyVehicle.Persistence
                     .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<Vehicle>> GetVehicles(VehicleQuery queryObj) 
+        // public async Task<IEnumerable<Vehicle>> GetVehicles(VehicleQuery queryObj) 
+        // {
+        //     var query = context.Vehicles
+        //         .Include(v => v.Model).ThenInclude(m => m.Make)
+        //         .Include(v => v.Features).ThenInclude(f => f.Feature)
+        //         .AsQueryable();
+
+        //     if (queryObj.MakeId.HasValue)
+        //         query = query.Where(x => x.Model.MakeId == queryObj.MakeId.Value);
+
+        //     if (queryObj.ModelId.HasValue)
+        //         query = query.Where(x => x.Model.Id == queryObj.ModelId.Value);
+            
+        //     var columnsMap = new Dictionary<string, Expression<Func<Vehicle, object>>>()
+        //     {
+        //         ["make"] = v => v.Model.Make.Name,
+        //         ["model"] = v => v.Model.Name,
+        //         ["contactName"] = v => v.ContactName,
+        //         //["id"] = v => v.Id,
+        //     };
+
+        //     query = query.ApplyOrdering(queryObj, columnsMap);
+
+        //     query = query.ApplyPaging(queryObj);
+
+        //     return await query.ToListAsync();
+        // }
+
+        public async Task<QueryResult<Vehicle>> GetVehicles(VehicleQuery queryObj) 
         {
+            var result = new QueryResult<Vehicle>();
             var query = context.Vehicles
                 .Include(v => v.Model).ThenInclude(m => m.Make)
-                .Include(v => v.Features).ThenInclude(f => f.Feature)
+            .Include(v => v.Features).ThenInclude(f => f.Feature)
                 .AsQueryable();
 
             if (queryObj.MakeId.HasValue)
@@ -50,9 +79,14 @@ namespace SellMyVehicle.Persistence
 
             query = query.ApplyOrdering(queryObj, columnsMap);
 
+            result.TotalItems = await query.CountAsync();
+
             query = query.ApplyPaging(queryObj);
 
-            return await query.ToListAsync();
+            result.Items = await query.ToListAsync();
+
+            return result;
+            //return await query.ToListAsync();
         }
 
         public void Add(Vehicle vehicle)

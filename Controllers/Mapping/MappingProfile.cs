@@ -23,6 +23,7 @@ namespace SellMyVehicle.Controllers.Mapping
                 .ForMember(vr => vr.Features, opt => opt.MapFrom(v => v.Features.Select(f => new KeyValuePairResource { Id = f.FeatureId, Name = f.Feature.Name })))
                 .ForMember(vr => vr.Make, opt => opt.MapFrom(v => v.Model.Make));
             CreateMap<VehicleQuery, VehicleQueryResource>();
+            CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
 
             // API resource to domain
             CreateMap<SaveVehicleResource, Vehicle>()
