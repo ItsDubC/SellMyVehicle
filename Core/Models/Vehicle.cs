@@ -24,6 +24,7 @@ namespace SellMyVehicle.Core.Models
         public DateTime LastUpdate { get; set; }
         //public ICollection<Feature> Features { get; set; }
         public ICollection<VehicleFeature> Features { get; set; }
+        public ICollection<Photo> Photos { get; set; }
 
         
         [Required]
@@ -32,6 +33,7 @@ namespace SellMyVehicle.Core.Models
         public Vehicle()
         {
             Features = new Collection<VehicleFeature>();
+            Photos = new Collection<Photo>();
         }
     }
 }
