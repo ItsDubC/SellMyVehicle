@@ -19,6 +19,7 @@ import { ToastrModule } from 'ngx-toastr'
 import { AppErrorHandler } from './common/app-error-handler';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './components/shared/pagination/pagination.component';
+import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { PaginationComponent } from './components/shared/pagination/pagination.c
     FetchDataComponent,
     VehicleFormComponent,
     VehicleListComponent,
-    PaginationComponent
+    PaginationComponent,
+    ViewVehicleComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -40,7 +42,8 @@ import { PaginationComponent } from './components/shared/pagination/pagination.c
     RouterModule.forRoot([
       { path: '', redirectTo: "vehicles", pathMatch: 'full' },
       { path: 'vehicles/new', component: VehicleFormComponent },
-      { path: 'vehicles/:id', component: VehicleFormComponent },
+      { path: 'vehicles/edit/:id', component: VehicleFormComponent },
+      { path: 'vehicles/:id', component: ViewVehicleComponent },
       { path: 'vehicles', component: VehicleListComponent },
       { path: 'home', component: HomeComponent },
       { path: 'counter', component: CounterComponent },
