@@ -1,10 +1,12 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using SellMyVehicle.Controllers.Resources;
 using SellMyVehicle.Core;
 using SellMyVehicle.Core.Models;
@@ -18,13 +20,19 @@ namespace SellMyVehicle.Controllers
         private readonly IVehicleRepository vehicleRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly PhotoSettings photoSettings;
 
-        public PhotosController(IHostingEnvironment host, IVehicleRepository vehicleRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public PhotosController(
+            IHostingEnvironment host, 
+            IVehicleRepository vehicleRepository, 
+            IUnitOfWork unitOfWork, 
+            IMapper mapper, IOptionsSnapshot<PhotoSettings> options)
         {
             this.host = host;
             this.vehicleRepository = vehicleRepository;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.photoSettings = options.Value;
         }
         // /api/vehicles/1/photos
         [HttpPost]
@@ -32,8 +40,14 @@ namespace SellMyVehicle.Controllers
         {
             var vehicle = await vehicleRepository.GetVehicle(vehicleId, includeRelated: false);
 
+            // Validations
             if (vehicle == null)
                 return NotFound();
+
+            if (file == null) return BadRequest("Null file");
+            if (file.Length == 0) return BadRequest("Empty file");
+            if (file.Length > photoSettings.MaxBytes) return BadRequest("Max file size exceeded");
+            if (!photoSettings.isFileSupported(file.FileName)) return BadRequest("Invalid file type");
 
             var uploadsFolderPath = Path.Combine(host.WebRootPath, "uploads");
 
