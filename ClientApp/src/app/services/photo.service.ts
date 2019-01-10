@@ -19,7 +19,6 @@ export class PhotoService {
   }
 
   getPhotos(vehicleId) {
-    console.log("in getPhotos");
     return this.http.get(`/api/vehicles/${vehicleId}/photos`).pipe(
       map(response => response.json()));
   }

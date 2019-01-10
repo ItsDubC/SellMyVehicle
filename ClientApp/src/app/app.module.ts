@@ -11,7 +11,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { MakeService } from './services/make.service';
 import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
-import { HttpModule } from '@angular/http'
+import { HttpModule, BrowserXhr } from '@angular/http'
 import { FeatureService } from './services/feature.service';
 import { VehicleService } from './services/vehicle.service';
 import { ToastrModule } from 'ngx-toastr'
@@ -21,6 +21,7 @@ import { PaginationComponent } from './components/shared/pagination/pagination.c
 import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
 import { PhotoService } from './services/photo.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
+import { BrowserXhrWithProgress, ProgressService } from './services/progress.service';
 
 @NgModule({
   declarations: [
@@ -57,10 +58,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
   providers: [
     VehicleService,
     PhotoService,
-    {
-      provide: ErrorHandler, 
-      useClass: AppErrorHandler
-    }
+    ProgressService,
+    { provide: ErrorHandler, useClass: AppErrorHandler },
+    { provide: BrowserXhr, useClass: BrowserXhrWithProgress }
   ],
   bootstrap: [AppComponent]
 })
