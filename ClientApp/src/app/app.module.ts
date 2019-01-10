@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -20,6 +19,8 @@ import { AppErrorHandler } from './common/app-error-handler';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './components/shared/pagination/pagination.component';
 import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
+import { PhotoService } from './services/photo.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 
 @NgModule({
   declarations: [
@@ -50,10 +51,12 @@ import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.com
       { path: 'fetch-data', component: FetchDataComponent },
       { path: '**', redirectTo: "home" },
     ]),
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    NgbModule
   ],
   providers: [
     VehicleService,
+    PhotoService,
     {
       provide: ErrorHandler, 
       useClass: AppErrorHandler
