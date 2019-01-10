@@ -17,4 +17,10 @@ export class PhotoService {
     return this.http.post(`/api/vehicles/${vehicleId}/photos`, formData).pipe(
       map(response => response.json()));
   }
+
+  getPhotos(vehicleId) {
+    console.log("in getPhotos");
+    return this.http.get(`/api/vehicles/${vehicleId}/photos`).pipe(
+      map(response => response.json()));
+  }
 }

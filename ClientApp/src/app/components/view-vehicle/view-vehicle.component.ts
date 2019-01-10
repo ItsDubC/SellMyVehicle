@@ -3,6 +3,7 @@ import { ActivatedRoute, Router }  from '@angular/router';
 import { VehicleService } from '../../services/vehicle.service';
 import { ToastrService } from 'ngx-toastr';
 import { PhotoService } from 'src/app/services/photo.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-view-vehicle',
@@ -13,6 +14,7 @@ export class ViewVehicleComponent implements OnInit {
   @ViewChild("fileInput") fileInput: ElementRef
   vehicle: any;
   vehicleId: number;
+  photos: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -32,11 +34,28 @@ export class ViewVehicleComponent implements OnInit {
   }
 
   ngOnInit() {
+    let observables = [
+      this.vehicleService.getVehicle(this.vehicleId),
+      this.photoService.getPhotos(this.vehicleId)
+    ];
+
+    // forkJoin(observables).subscribe(data => {
+    //   this.vehicle = data[0];
+    //   this.photos = data[1];
+    //   console.log(this.photos);
+    // }, err => this.router.navigate(["/vehicles"]));
+    
     this.vehicleService.getVehicle(this.vehicleId).subscribe(v => this.vehicle = v, err => {
       if (err.constructor.name == "NotFoundError") {
         this.router.navigate(["/vehicles"]);
       }
-    })
+    });
+
+    this.photoService.getPhotos(this.vehicleId).subscribe(p => this.photos = p, err => {
+      if (err.constructor.name == "NotFoundError") {
+        this.router.navigate(["/vehicles"]);
+      }
+    });
   }
 
   delete() {
