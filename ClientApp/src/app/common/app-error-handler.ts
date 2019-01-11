@@ -8,6 +8,14 @@ export class AppErrorHandler implements ErrorHandler {
         @Inject(ToastrService) private toastrService: ToastrService) {}
 
     handleError(error) {
+        this.ngZone.run(() => {
+            this.toastrService.error("An unexpected error happened.", "Error", {
+                timeOut: 5000,
+                closeButton: true,
+                positionClass: "toast-top-right"
+            });
+        });
+
         if (!isDevMode()) {
             //  Log entry in Sentry.io
             //  Raven.captureException(error.originalError || error);
@@ -16,13 +24,5 @@ export class AppErrorHandler implements ErrorHandler {
             console.log(error);
             throw error;
         }
-
-        this.ngZone.run(() => {
-            this.toastrService.error("An unexpected error happened.", "Error", {
-                timeOut: 5000,
-                closeButton: true,
-                positionClass: "toast-top-right"
-            });
-        });
     }
 }
