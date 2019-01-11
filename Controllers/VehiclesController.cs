@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using SellMyVehicle.Controllers.Resources;
 using SellMyVehicle.Core.Models;
 using SellMyVehicle.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SellMyVehicle.Controllers
 {
@@ -58,6 +59,7 @@ namespace SellMyVehicle.Controllers
         // }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
         {
             if (!ModelState.IsValid)
@@ -77,6 +79,7 @@ namespace SellMyVehicle.Controllers
         }
 
         [HttpPut("{id}")] // /api/vehicles/{id}
+        [Authorize]
         public async Task<IActionResult> UpdateVehicle(int id, [FromBody] SaveVehicleResource vehicleResource)
         {
             if (!ModelState.IsValid)
@@ -101,6 +104,7 @@ namespace SellMyVehicle.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteVehicle(int id)
         {
             var vehicle = await repository.GetVehicle(id, includeRelated: false);

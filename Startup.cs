@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -44,6 +45,18 @@ namespace SellMyVehicle
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            // 1. Add Authentication Services
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://sellmyvehicle.auth0.com/";
+                options.Audience = "https://api.sellmyvehicle.com";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,6 +77,9 @@ namespace SellMyVehicle
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseCors("AllowAll");
+
+            // 2. Enable authentication middleware
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
