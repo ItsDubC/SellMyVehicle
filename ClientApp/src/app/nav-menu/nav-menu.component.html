@@ -8,6 +8,12 @@
       </button>
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
         <ul class="navbar-nav flex-grow">
+          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+            <a class="nav-link text-dark" href="sellmyvehicle.auth0.com/login?client=rIBtG64LD7IuSGG9e7yCequNBovvTDD0" *ngIf="!auth.isAuthenticated()">Login</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+            <a class="nav-link text-dark" (click)="auth.logout()" *ngIf="auth.isAuthenticated()">Logout</a>
+          </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
             <a class="nav-link text-dark" [routerLink]='["/"]'>Home</a>
           </li>

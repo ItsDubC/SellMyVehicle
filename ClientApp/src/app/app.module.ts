@@ -22,6 +22,7 @@ import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.com
 import { PhotoService } from './services/photo.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { BrowserXhrWithProgress, ProgressService } from './services/progress.service';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { BrowserXhrWithProgress, ProgressService } from './services/progress.ser
     VehicleService,
     PhotoService,
     ProgressService,
+    AuthService,
     { provide: ErrorHandler, useClass: AppErrorHandler },
     { provide: BrowserXhr, useClass: BrowserXhrWithProgress }
   ],
