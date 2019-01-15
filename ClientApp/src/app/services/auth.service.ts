@@ -48,7 +48,7 @@ export class AuthService {
       .events
       .pipe(
         filter(event => event instanceof NavigationStart),
-        filter((event: NavigationStart) => (/access_token|id_token|error/).test(event.url))
+        filter((event: NavigationStart) => (/access_token|token|error/).test(event.url))
       )
       .subscribe(() => {
         this.lock.resumeAuth(window.location.hash, (err, authResult) => {
@@ -68,14 +68,14 @@ export class AuthService {
     // Set the time that the access token will expire at
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
   }
 
   public logout(): void {
     // Remove tokens and expiry time from localStorage
     localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
+    localStorage.removeItem('token');
     localStorage.removeItem('expires_at');
     // Go back to the home route
     this.router.navigate(['/']);
@@ -96,7 +96,7 @@ export class AuthService {
   // auth0 = new auth0.WebAuth({
   //   clientID: 'rIBtG64LD7IuSGG9e7yCequNBovvTDD0',
   //   domain: 'sellmyvehicle.auth0.com',
-  //   responseType: 'token id_token',
+  //   responseType: 'token token',
   //   redirectUri: 'http://localhost:5000/vehicles',
   //   scope: 'openid'
   // });
