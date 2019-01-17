@@ -28,6 +28,7 @@ export class AuthService {
   // if using path-based routing
   public handleAuthentication(): void {
     this.lock.on('authenticated', (authResult) => {
+      console.log("authResult", authResult);
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
         this.router.navigate(['/']);
